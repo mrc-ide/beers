@@ -1,0 +1,41 @@
+---
+title: "beers"
+author: "Wes Hinsley"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The Beers interpolation is used particularly in demographic interpolation, where
+frequently it is necessary to interpolate 5-yearly data, down to single year points.
+Standard UNWPP population data for instance, is 5-yearly in its native representation,
+but UNWPP use the Beers ordinary method (among other transformations) to produce
+the interpolated data.
+
+## Installation
+
+```r
+# install.package("r-beers")
+```
+
+## Usage
+
+### Ordinary Method
+```r
+beers_ordinary(c(1, 2, 4, 8, 16, 32))
+```
+
+### Modified Method
+```r
+beers_modified(c(1, 2, 4, 8, 16, 32))
+```
