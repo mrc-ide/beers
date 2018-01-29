@@ -1,0 +1,13 @@
+Package: beers
+Title: Calculate Beers Ordinary Interpolation
+Version: 0.1
+Authors@R: person("Wes", "Hinsley", email = "w.hinsley@imperial.ac.uk", 
+          role = c("aut", "cre"))
+Description: Calculate Beers Interpolation (both Ordinary and Modified method); a six-term formula which minimizes the fifth differences of the interpolated results. 
+    See p877 of The Methods and Materials of Demography, Volume 2, referring to
+    Beers, The Record of the American Institute of Actuaries, 34, Part I (69):59-60, June 1945.
+Depends: R (>= 3.3.3)
+License: MIT
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
