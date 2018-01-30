@@ -1,6 +1,4 @@
-library(R6)
-
-Beers_Interpolator <- R6Class("Beers_Interpolator",
+Beers_Interpolator <- R6::R6Class("Beers_Interpolator",
 
   public = list(
     b1 = NULL,
