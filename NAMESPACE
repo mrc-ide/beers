@@ -2,7 +2,5 @@
 
 export(beers_int_modified)
 export(beers_int_ordinary)
-export(beers_modified)
-export(beers_ordinary)
 export(beers_sub_modified)
 export(beers_sub_ordinary)
