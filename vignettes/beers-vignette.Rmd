@@ -10,6 +10,7 @@ vignette: >
 ---
 
 ```{r setup, include = FALSE}
+library(beers)
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
