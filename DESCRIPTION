@@ -1,6 +1,6 @@
 Package: beers
 Title: Calculate Beers Ordinary Interpolation
-Version: 0.1
+Version: 0.1.0
 Authors@R: person("Wes", "Hinsley", email = "w.hinsley@imperial.ac.uk", 
           role = c("aut", "cre"))
 Description: Calculate Beers Interpolation (both Ordinary and Modified method); a six-term formula which minimizes the fifth differences of the interpolated results. 
@@ -10,8 +10,6 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
-Imports:
-    R6
 Suggests: knitr,
     rmarkdown,
     testthat

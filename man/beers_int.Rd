@@ -3,39 +3,26 @@
 \name{beers_int_ordinary}
 \alias{beers_int_ordinary}
 \alias{beers_int_modified}
-\alias{beers_sub_ordinary}
-\alias{beers_sub_modified}
-\title{Beers interpolation, or subdivision, using ordinary or modified method.}
+\title{Beers interpolation, using ordinary or modified method.}
 \usage{
 beers_int_ordinary(points)
 
 beers_int_modified(points)
-
-beers_sub_ordinary(points)
-
-beers_sub_modified(points)
 }
 \arguments{
-\item{points}{For interpolation: a list of at least 6 numbers, eg, populations over time.}
-
-\item{points}{For subdivision: a list of at least 5 numbers, eg, populations by age band.}
+\item{points}{A list of at least 6 numbers, eg, populations over time.}
 }
 \value{
-For interpolation: a list where each original number exists with four interpolated points between each.
-
-For subdivision: a list 5 times as long as the original, with each original entry subdivided into 5.
+A list with four extra interpolated points between each pair of given points.
 }
 \description{
-Beers interpolation, or subdivision, using ordinary or modified method.
+Add 4 interpolated points between each pair of given values.
+With the ordinary method, the data points given will appear, unchanged, in the interpolated list.
+With the modified method, some smoothing occurs, and only the first and last points given are guaranteed to appear unchanged in the interpolated list.
 }
 \examples{
 # Interpolate population of UK (1950, 1955, 1960, 1965, 1970, 1975) to yearly points
 
 beers_int_ordinary(c(50616014, 51123707, 52433157, 54303107, 55634935, 56211947))
 beers_int_modified(c(50616014, 51123707, 52433157, 54303107, 55634935, 56211947))
-
-# Subdivide population of UK (2011), ages 0-4, 5-9, 10-14, 15-19, 20-24 into single years.
-
-beers_sub_ordinary(c(3914000, 3517000, 3670000, 3997000, 4297000))
-beers_sub_modified(c(3914000, 3517000, 3670000, 3997000, 4297000))
 }

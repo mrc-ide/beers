@@ -96,10 +96,14 @@ subdivide <- function(points, B1, B2, BM, BP, BF) {
   res
 }
 
-#' Beers interpolation, or subdivision, using ordinary or modified method.
+#' Beers interpolation, using ordinary or modified method.
+#' 
+#' Create 4 interpolated points between each pair of given values.
+#' With the ordinary method, the given data points given will be included unchanged in the interpolated list.
+#' With the modified method, some smoothing occurs, and only the first and last points given are guaranteed to appear unchanged in the interpolated list.
 #'
-#' @param points For interpolation: a list of at least 6 numbers, eg, populations over time.
-#' @return For interpolation: a list where each original number exists with four interpolated points between each.
+#' @param points A list of at least 6 numbers, eg, populations over time.
+#' @return A list with four extra interpolated points between each pair of given points. 
 #' @export
 #' @rdname beers_int
 #' @examples
@@ -122,15 +126,19 @@ beers_int_modified <- function(points) {
                       BEERS_INT_MOD_FINAL)
 }
 
-#' @param points For subdivision: a list of at least 5 numbers, eg, populations by age band.
-#' @return For subdivision: a list 5 times as long as the original, with each original entry subdivided into 5.
+#' Beers subdivision, using ordinary or modified method.
+#' 
+#' With the ordinary method, each set of 5 subdivided values will always sum to the original data point given.
+#' With the modified method, some smoothing occurs, and this property is only true for the first and last given data point.
+#' @param points A list of at least 5 numbers, eg, populations by 5-year age-band.
+#' @return For subdivision: a list 5 times as long as the original, with each point subdivided into 5.
 #' @export
-#' @rdname beers_int 
+#' @rdname beers_sub
 #' @examples
 #' 
-#' # Subdivide population of UK (2011), ages 0-4, 5-9, 10-14, 15-19, 20-24 into single years.
+#' # Subdivide population of UK (2015), ages 0-4, 5-9, 10-14, 15-19, 20-24 into single years.
 #' 
-#' beers_sub_ordinary(c(3914000, 3517000, 3670000, 3997000, 4297000))
+#' beers_sub_ordinary(c(4042918, 3927745, 3529200, 3779712, 4174572))
 beers_sub_ordinary <- function(points) {
   subdivide(points, BEERS_SUB_ORD_FIRST, BEERS_SUB_ORD_SECOND,
                     BEERS_SUB_ORD_MID,   BEERS_SUB_ORD_PENULT,
@@ -139,9 +147,9 @@ beers_sub_ordinary <- function(points) {
 
 
 #' @export
-#' @rdname beers_int
+#' @rdname beers_sub
 #' @examples
-#' beers_sub_modified(c(3914000, 3517000, 3670000, 3997000, 4297000))
+#' beers_sub_modified(c(4042918, 3927745, 3529200, 3779712, 4174572))
 beers_sub_modified <- function(points) {
   subdivide(points, BEERS_SUB_MOD_FIRST, BEERS_SUB_MOD_SECOND,
                     BEERS_SUB_MOD_MID,   BEERS_SUB_MOD_PENULT,
