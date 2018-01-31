@@ -96,52 +96,52 @@ subdivide <- function(points, B1, B2, BM, BP, BF) {
   res
 }
 
-#' Beers ordinary algorithm for interpolation.
+#' Beers interpolation, or subdivision, using ordinary or modified method.
 #'
-#' @param points A list of at least 6 numbers.
-#' @return A list where each original number exists with four interpolated points between each.
+#' @param points For interpolation: a list of at least 6 numbers, eg, populations over time.
+#' @return For interpolation: a list where each original number exists with four interpolated points between each.
 #' @export
+#' @rdname beers_int
 #' @examples
-#' beers_int_ordinary(1:6)
+#' # Interpolate population of UK (1950, 1955, 1960, 1965, 1970, 1975) to yearly points
+#' 
+#' beers_int_ordinary(c(50616014, 51123707, 52433157, 54303107, 55634935, 56211947))
 beers_int_ordinary <- function(points) {
   interpolate(points, BEERS_INT_ORD_FIRST, BEERS_INT_ORD_SECOND,
                       BEERS_INT_ORD_MID, BEERS_INT_ORD_PENULT,
                       BEERS_INT_ORD_FINAL)
 }
 
-#' Beers modified algorithm for interpolation.
-#'
-#' @param points A list of at least 6 numbers.
-#' @return A list where each original number exists with four interpolated points between each.
 #' @export
+#' @rdname beers_int
 #' @examples
-#' beers_int_modified(1:6)
+#' beers_int_modified(c(50616014, 51123707, 52433157, 54303107, 55634935, 56211947))
 beers_int_modified <- function(points) {
   interpolate(points, BEERS_INT_MOD_FIRST, BEERS_INT_MOD_SECOND,
                       BEERS_INT_MOD_MID, BEERS_INT_MOD_PENULT,
                       BEERS_INT_MOD_FINAL)
 }
 
-#' Beers ordinary algorithm for subdivision.
-#'
-#' @param points A list of at least 5 numbers.
-#' @return A list 5 times as long as the original, with each original entry subdivided into 5.
+#' @param points For subdivision: a list of at least 5 numbers, eg, populations by age band.
+#' @return For subdivision: a list 5 times as long as the original, with each original entry subdivided into 5.
 #' @export
+#' @rdname beers_int 
 #' @examples
-#' beers_sub_ordinary(1:6)
+#' 
+#' # Subdivide population of UK (2011), ages 0-4, 5-9, 10-14, 15-19, 20-24 into single years.
+#' 
+#' beers_sub_ordinary(c(3914000, 3517000, 3670000, 3997000, 4297000))
 beers_sub_ordinary <- function(points) {
   subdivide(points, BEERS_SUB_ORD_FIRST, BEERS_SUB_ORD_SECOND,
                     BEERS_SUB_ORD_MID,   BEERS_SUB_ORD_PENULT,
                     BEERS_SUB_ORD_FINAL)
 }
 
-#' Beers modified algorithm for subdivision.
-#'
-#' @param points A list of at least 5 numbers.
-#' @return A list 5 times as long as the original, with each original entry subdivided into 5.
+
 #' @export
+#' @rdname beers_int
 #' @examples
-#' beers_sub_modified(1:6)
+#' beers_sub_modified(c(3914000, 3517000, 3670000, 3997000, 4297000))
 beers_sub_modified <- function(points) {
   subdivide(points, BEERS_SUB_MOD_FIRST, BEERS_SUB_MOD_SECOND,
                     BEERS_SUB_MOD_MID,   BEERS_SUB_MOD_PENULT,
