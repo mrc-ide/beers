@@ -16,26 +16,54 @@ knitr::opts_chunk$set(
 )
 ```
 
-The Beers interpolation is used particularly in demographic interpolation, where
-frequently it is necessary to interpolate 5-yearly data, down to single year points.
-Standard UNWPP population data for instance, is 5-yearly in its native representation,
-but UNWPP use the Beers ordinary method (among other transformations) to produce
-the interpolated data.
+## Introduction
 
-## Installation
+The beers package provides the Beers ordinary and modified methods for interpolating
+between 5-yearly points, and subdividing 5-yearly agebands. The most likely usage is 
+with demographic data that has been presented at 5-yearly intervals, or in 5-yearly
+age-bands. The Beers algorithm can be used to interpolate, or subdivide those data
+respectively, and is notably used by UNWPP for that purpose.
 
-```r
-# install.package("beers")
-```
+## Background
+
+The original algorithms were created by Henry S. Beers. I have not been able to locate
+these papers, but for the ordinary and modified methods respectively, the original
+papers are:
+
+* "Discussion of Papers Presented in the Record, No. 68: 'Six-Term Formulas for Routine Actuarial Interpolation', Henry. S. Beers, The Record of the American Institute of Actuaries 34, Part I(69): 59-60, June 1945.
+* "Modified Interpolation Formulas that Minimize Fourth Differences." Henry S. Beers, The Record of the American Institute of Actuaries 34, Part I(69): 19-29, June 1945.
+
+The coefficients are published in:
+* The Methods and Materials of Demography, 2nd Edition, Editors David A. Swanson and Jacob S. Siegel. Appendix C, Selected General Methods, D.H. Judson and Carole L. Popoff. p728-729. [http://demographybook.weebly.com/uploads/2/7/2/5/27251849/david_a._swanson_jacob_s._siegel_the_methods_and_materials_of_demography_second_edition__2004.pdf] 
+
+But note that there are two typos in this edition:
+
+* p728, Beers Ordinary Interpolation, Middle Interval, N3.0, fourth column should be 0.000, not 1.0000
+* p729, Beers Modified Interpolation, Last Interval, N5.6, 5th number should be +.8592, not +.8529. (See the symmetrical entry in First Interval, N1.4)
 
 ## Usage
 
-### Ordinary Method
-```r
-beers_ordinary(c(1, 2, 4, 8, 16, 32))
+Calling the functions is simple.
+```{r example}
+beers_int_ordinary(c(1, 2, 4, 8, 16, 32))
+beers_int_modified(c(1, 2, 4, 8, 16, 32))
+beers_sub_ordinary(c(10, 20, 40, 80, 160))
+beers_sub_modified(c(10, 20, 40, 80, 160))
 ```
 
-### Modified Method
-```r
-beers_modified(c(1, 2, 4, 8, 16, 32))
-```
+The interpolations require at least 6 points - for example, population in 
+1950, 1955, 1960, 1965, 1970 and 1975, hence providing 5 panels between the points, in which to interpolate. Subdivisions require at least 5 points to be subdivided - for
+example, population in age range 0-4, 5-9, 10-14, 15-19, 20-24.
+
+The ordinary algorithms have two particular properties:-
+
+* For interpolation, all of the original data points (ie, 1950, 1955, 1960...) are
+unchanged by the algorithm; interpolation occurs between the points.
+* For subdivision, every subdivided set of 5 populations sums to the original value - (ie, population for ages 5, 6, 7, 8, 9 will sum to give the original 5-9 value.)
+
+The modified algorithms result cause extra smoothing to be carried out, such that:-
+
+* For interpolation, only the first and final data point's values are preserved; the interpolation provides new values for *all* the intermediate points, including those 
+that you provided data for.
+* For subdivision, only the first, and the final age-bands have the property that the
+sub-divided populations sum to the original age-band population.
