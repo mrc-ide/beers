@@ -13,7 +13,7 @@ vignette: >
 library(beers)
 knitr::opts_chunk$set(
   collapse = TRUE,
-  fig.width = 5,
+  fig.width = 7,
   fig.height = 5,
   comment = "#>"
 )
@@ -39,7 +39,8 @@ Actuarial Interpolation', Henry. S. Beers, The Record of the American Institute 
 The Record of the American Institute of Actuaries 34, Part I(69): 19-29, June 1945.
 
 The coefficients are published in:
-* The Methods and Materials of Demography, 2nd Edition, Editors David A. Swanson and Jacob S. Siegel. 
+
+* The Methods and Materials of Demography, 2nd Edition, Editors David A. Swanson and Jacob S. Siegel.
 Appendix C, Selected General Methods, D.H. Judson and Carole L. Popoff. p728-729. [http://demographybook.weebly.com/uploads/2/7/2/5/27251849/david_a._swanson_jacob_s._siegel_the_methods_and_materials_of_demography_second_edition__2004.pdf] 
 
 But note that there are two typos in this edition:
@@ -123,13 +124,13 @@ plot(x = ukr$year, y = ukr$pop, main = "Interpolated Population of Ukraine",
     )
 
 plot(x = ukr$year, y = ukr$pop, main = "Interpolated Population of Ukraine",
-     xlim = c(1980,2000), ylim = c(48500,51500), xlab = "Year", ylab = "Population (k)")
+     xlim = c(1980,1995), ylim = c(49500,51500), xlab = "Year", ylab = "Population (k)")
 
   lines(x = ordinary$year, y = ordinary$pop, col = "red")
   lines(x = modified$year, y = modified$pop, col = "blue")
   lines(x = app_lin$x, y = app_lin$y, col = "darkgreen")
   lines(x = r_spline$x, y = r_spline$y, col = "brown")
-  legend("topright",
+  legend("bottomright",
       legend = c("Original", "Beers Ordinary", "Beers Modified", 
                  "R approx-linear", "R spline"),
       col = c("black", "red", "blue", "darkgreen", "brown"),
