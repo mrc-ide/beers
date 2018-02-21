@@ -16,8 +16,8 @@ beers_int_modified(points)
 A list with four extra interpolated points between each pair of given points.
 }
 \description{
-Add 4 interpolated points between each pair of given values.
-With the ordinary method, the data points given will appear, unchanged, in the interpolated list.
+Create 4 interpolated points between each pair of given values.
+With the ordinary method, the given data points given will be included unchanged in the interpolated list.
 With the modified method, some smoothing occurs, and only the first and last points given are guaranteed to appear unchanged in the interpolated list.
 }
 \examples{

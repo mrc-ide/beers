@@ -17,7 +17,7 @@ For subdivision: a list 5 times as long as the original, with each point subdivi
 }
 \description{
 With the ordinary method, each set of 5 subdivided values will always sum to the original data point given.
-With the modified method, some smoothing occurs, and this property is only true for the first and last data point.
+With the modified method, some smoothing occurs, and this property is only true for the first and last given data point.
 }
 \examples{
 
