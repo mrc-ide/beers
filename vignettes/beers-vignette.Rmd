@@ -1,0 +1,145 @@
+---
+title: "beers"
+author: "Wes Hinsley"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{beers}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE, echo = FALSE, results = "hide"}
+library(beers)
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.width = 7,
+  fig.height = 5,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+The beers package provides the Beers ordinary and modified methods for interpolating
+between 5-yearly points, and subdividing 5-yearly agebands. The most likely usage is 
+with demographic data that has been presented at 5-yearly intervals, or in 5-yearly
+age-bands. The Beers algorithm can be used to interpolate, or subdivide those data
+respectively, and is notably used by UNWPP for that purpose.
+
+## Background
+
+The original algorithms were created by Henry S. Beers. I have not been able to locate
+these papers, but for the ordinary and modified methods respectively, the original
+papers are:
+
+* "Discussion of Papers Presented in the Record, No. 68: 'Six-Term Formulas for Routine 
+Actuarial Interpolation', Henry. S. Beers, The Record of the American Institute of Actuaries 34, Part I(69): 59-60, June 1945.
+* "Modified Interpolation Formulas that Minimize Fourth Differences." Henry S. Beers, 
+The Record of the American Institute of Actuaries 34, Part I(69): 19-29, June 1945.
+
+The coefficients are published in:
+
+* The Methods and Materials of Demography, 2nd Edition, Editors David A. Swanson and Jacob S. Siegel.
+Appendix C, Selected General Methods, D.H. Judson and Carole L. Popoff. p728-729. [http://demographybook.weebly.com/uploads/2/7/2/5/27251849/david_a._swanson_jacob_s._siegel_the_methods_and_materials_of_demography_second_edition__2004.pdf] 
+
+But note that there are two typos in this edition:
+
+* p728, Beers Ordinary Interpolation, Middle Interval, N3.0, fourth column should be 0.000, not 1.0000
+* p729, Beers Modified Interpolation, Last Interval, N5.6, 5th number should be +.8592, not +.8529. 
+(See the symmetrical entry in First Interval, N1.4)
+
+## Usage - how?
+
+Calling the functions is simple.
+```{r example}
+beers_int_ordinary(c(1, 2, 4, 8, 16, 32))
+beers_int_modified(c(1, 2, 4, 8, 16, 32))
+beers_sub_ordinary(c(10, 20, 40, 80, 160))
+beers_sub_modified(c(10, 20, 40, 80, 160))
+```
+
+The interpolations require at least 6 points - for example, population in 
+1950, 1955, 1960, 1965, 1970 and 1975, hence providing 5 panels between the points, in which to interpolate. Subdivisions require at least 5 points to be subdivided - for
+example, population in age range 0-4, 5-9, 10-14, 15-19, 20-24.
+
+The ordinary algorithms have two particular properties:-
+
+* For interpolation, all of the original data points (ie, 1950, 1955, 1960...) are
+unchanged by the algorithm; interpolation occurs between the points.
+* For subdivision, every subdivided set of 5 populations sums to the original value - (ie, population for ages 5, 6, 7, 8, 9 will sum to give the original 5-9 value.)
+
+The modified algorithms cause extra smoothing to be carried out, such that:-
+
+* For interpolation, only the first and final data point's values are preserved; the interpolation provides new values for *all* the 
+intermediate points, including those for which you provided data.
+* For subdivision, only the first, and the final age-bands have the property that the
+sub-divided populations sum to the original age-band population.
+
+## Usage - why?
+
+When writing the package, the purpose was to replicate as exactly as possible 
+algorithms used by UNWPP in their population interpolations, using the exact values
+given in the published tables. Presumably these figures are truncated from a
+some function that is possibly documented in the 1945 paper, if only we could find it.
+
+There are other options for interpolation of course, and perhaps the Beers algorithm
+here is approximately equivalent to one of the interpolation options available in R. 
+
+```{r ukr_interp, echo = FALSE}
+
+ukr <- data.frame(pop = c(37297648, 40019449, 42662149, 45261935, 47086761, 48758987,
+                          49968812, 50920778, 51464348, 50905677, 48840074, 46892163,
+                          45792501, 44657704, 43579234, 42452647, 41200374, 39896340,
+                          38658013, 37512851, 36415702, 35315013, 34190485, 33061130,
+                          31992330, 31056617, 30287940, 29673481, 29160406, 28678792,
+                          28185563),
+	          year = seq(1950, 2100, 5))
+
+ukr$pop = ukr$pop / 1000.0
+
+ordinary <- data.frame(pop = beers_int_ordinary(ukr$pop),
+                       year = seq(1950,2100,1))
+
+modified <- data.frame(pop = beers_int_modified(ukr$pop),
+                       year = seq(1950,2100,1))
+
+app_lin <- approx(x = ukr$year, y = ukr$pop, xout = seq(1950,2100,1), method="linear")
+
+r_spline <- spline(x = ukr$year, y = ukr$pop, n = 151, method = "fmm")
+
+plot(x = ukr$year, y = ukr$pop, main = "Interpolated Population of Ukraine",
+     xlab = "Year", ylab = "Population (k)")
+
+  lines(x = ordinary$year, y = ordinary$pop, col = "red")
+  lines(x = modified$year, y = modified$pop, col = "blue")
+  lines(x = app_lin$x, y = app_lin$y, col = "darkgreen")
+  lines(x = r_spline$x, y = r_spline$y, col = "brown")
+  legend("topright",
+      legend = c("Original", "Beers Ordinary", "Beers Modified", 
+                 "R approx-linear", "R spline"),
+      col = c("black", "red", "blue", "darkgreen", "brown"),
+      lty = c(NA, 1, 1, 1, 1),
+      pch = c(1, NA, NA, NA, NA)
+    )
+
+plot(x = ukr$year, y = ukr$pop, main = "Interpolated Population of Ukraine",
+     xlim = c(1980,1995), ylim = c(49500,51500), xlab = "Year", ylab = "Population (k)")
+
+  lines(x = ordinary$year, y = ordinary$pop, col = "red")
+  lines(x = modified$year, y = modified$pop, col = "blue")
+  lines(x = app_lin$x, y = app_lin$y, col = "darkgreen")
+  lines(x = r_spline$x, y = r_spline$y, col = "brown")
+  legend("bottomright",
+      legend = c("Original", "Beers Ordinary", "Beers Modified", 
+                 "R approx-linear", "R spline"),
+      col = c("black", "red", "blue", "darkgreen", "brown"),
+      lty = c(NA, 1, 1, 1, 1),
+      pch = c(1, NA, NA, NA, NA)
+    )
+
+
+```
+Results are fairly inconclusive. So, it looks like you should use the Beers library if
+you really specifically want Beers; otherwise, you might as well look into R's spline
+function for more flexible and documented options!
