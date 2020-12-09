@@ -6,3 +6,4 @@
 ^README-.*\.png$
 ^codecov\.yml$
 ^appveyor\.yml$
+^\.github$
